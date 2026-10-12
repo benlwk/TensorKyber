@@ -49,20 +49,3 @@ make ARCH=sm_89                 # target architecture (default sm_89)
 ```
 
 Positional arguments are supported too: `./ntt_bench [npoly] [runs]`.
-
-## Protocol
-
-* batch size `262144` polynomials, `30` timed runs by default;
-* each variant is validated byte-exact (mod q normalised) against the
-  reference C NTT/iNTT on the first 64 polynomials before timing;
-* warm-up: 2 untimed launches of every kernel;
-* **every variant re-stages its input before each timed forward run** (the int16
-  variants re-upload their 128 MB buffer; TC-PACK re-uploads its 16 MB packed
-  buffer), so all four loops are structurally identical and each timed run
-  starts from the same input/cache/power state.  Without the TC-PACK re-upload
-  its forward throughput swung between ~180 and ~265 M poly/s and its mean and
-  median diverged by ~20%; with it they agree to within a few percent.
-* reported per variant: **mean**, **median** and sample std-dev of the
-  polynomial throughput (poly/s), plus the median latency in ms;
-* the consolidated summary table prints mean *and* median for NTT, iNTT and
-  the NTT+iNTT round trip.
