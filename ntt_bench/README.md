@@ -3,16 +3,6 @@
 Self-contained extraction of the NTT/iNTT benchmark from
 `../bench_ntt.cu`, trimmed to the three production tensor-core batch paths.
 
-## Layout
-
-| file                | role                                                            |
-|---------------------|-----------------------------------------------------------------|
-| `ntt_bench.cu`      | benchmark (ported from `../bench_ntt.cu`)                       |
-| `ntt_kernels.cuh`   | NTT-only device kernels: reductions, TC matrices, the compute cores `ntt_core`/`intt_core`, the register-staged wrappers `ntt_regstage`/`intt_regstage`, `stage_tc_matrices`/`setup_tc_matrices`. `#include`d by the benchmark. All KEM code (Keccak/SHAKE, CBD, matrix generation, poly/polyvec packing, CPA/KEM kernels and the KEM harness) has been removed. |
-| `ref/ntt.c`         | reference C NTT (`ref/` ground truth), compiled with `-DKYBER_K=$(K)` |
-| `ref/reduce.c`      | reference Montgomery/Barrett reductions needed by `ref/ntt.c`   |
-| `Makefile`          | build + run                                                     |
-
 ## Variants benchmarked
 
 1. **2TC** - register-staged, WMMA per-block Stage-2. Each lane holds its own
@@ -25,13 +15,6 @@ Self-contained extraction of the NTT/iNTT benchmark from
    (4 coeffs/byte, 64 B/poly) cp.async'd into shared, unpacked into the standard
    int16 slot layout, forward core with the BASIC (single-limb) `M1` matrix and
    scalar Stage-2. Its inverse is TC-CC-CP.
-
-Removed relative to the original benchmark: Baseline (BFS, `ref` source),
-EDFS-1-6, the cp.async WMMA-S2 variant and all single-warp
-(1 thread / 1 warp per polynomial) variants.
-
-All four run in the "32 tasks per warp" geometry with `block = 64`; every
-polynomial is one task.
 
 ## Build & run
 
