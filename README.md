@@ -69,7 +69,6 @@ make                 # builds ./ntt_bench
 
 ```sh
 make run                          # defaults: 262144 polynomials, 30 timed runs
-make K=3 run                      # Kyber-768 instead of Kyber-512
 make NPOLY=65536 RUNS=10 run      # smaller batch, fewer runs
 make ARCH=sm_80 run               # build for a different GPU
 ```
@@ -85,7 +84,6 @@ Or drive the binary directly (positional arguments override the defaults):
 | variable | default    | meaning |
 |----------|-----------:|---------|
 | `ARCH`   | `sm_89`    | `-arch` passed to `nvcc`. |
-| `K`      | `2`        | ML-KEM parameter set: `2` = ML-KEM-512, `3` = ML-KEM-768, `4` = ML-KEM-1024. |
 | `NPOLY`  | `262144`   | Number of polynomials in the batch. |
 | `RUNS`   | `30`       | Timed runs per kernel (clamped to `MAX_RUNS = 64`). |
 
