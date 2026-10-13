@@ -27,7 +27,6 @@ Overrides:
 
 ```sh
 make NPOLY=65536 RUNS=10 run    # smaller batch / fewer runs
-make K=3 run                    # Kyber-768 instead of Kyber-512
 make ARCH=sm_89                 # target architecture (default sm_89)
 ```
 
